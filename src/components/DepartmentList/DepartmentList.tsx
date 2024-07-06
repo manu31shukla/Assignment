@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { List, ListItemText, Collapse, Checkbox } from '@mui/material';
+import { List, ListItemText, Collapse, Checkbox, ListItemButton } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { StyledList, StyledListItem, SubListItem } from './DepartmentList.styles';
+import { StyledList, SubListItem } from './DepartmentList.styles'; 
 
 interface Department {
   department: string;
@@ -67,7 +67,7 @@ const DepartmentList: React.FC = () => {
     if (!anySelected) {
       setSelected((prev) => ({
         ...prev,
-        [parentName]: false, 
+        [parentName]: false,
       }));
     }
   };
@@ -76,7 +76,11 @@ const DepartmentList: React.FC = () => {
     <StyledList>
       {departments.map((dept) => (
         <div key={dept.department}>
-          <StyledListItem button onClick={() => handleToggle(dept.department)} selected={selected[dept.department]}>
+          {/* Replace StyledListItem with ListItemButton */}
+          <ListItemButton
+            onClick={() => handleToggle(dept.department)}
+            selected={selected[dept.department]}
+          >
             <Checkbox
               edge="start"
               checked={selected[dept.department] || false}
@@ -86,13 +90,12 @@ const DepartmentList: React.FC = () => {
             />
             <ListItemText primary={dept.department.replace('_', ' ')} />
             {open[dept.department] ? <ExpandLess /> : <ExpandMore />}
-          </StyledListItem>
+          </ListItemButton>
           <Collapse in={open[dept.department]} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {dept.sub_departments.map((subDept) => (
                 <SubListItem
                   key={subDept}
-                  button
                   onClick={() => {
                     handleSelect(dept.department, subDept);
                     handleSubDeptDeselect(dept.department, subDept);
